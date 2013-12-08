@@ -1,9 +1,9 @@
 package negotiator
 
 import (
-	"mud/telnet/opt"
-	"mud/telnet/opt/naws"
-	"mud/telnet/opt/ttype"
+	"github.com/egonelbre/mud/telnet/opt"
+	"github.com/egonelbre/mud/telnet/opt/naws"
+	"github.com/egonelbre/mud/telnet/opt/ttype"
 )
 
 var DefaultInitiator = map[byte]Initiator{

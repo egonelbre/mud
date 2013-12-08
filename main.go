@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"mud/telnet/remote"
+	"github.com/egonelbre/mud/telnet/remote"
 	"net"
 	"os"
 )

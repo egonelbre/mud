@@ -1,6 +1,6 @@
 package negotiator
 
-import "mud/telnet"
+import "github.com/egonelbre/mud/telnet"
 
 type Initiator func(telnet.Command) telnet.Negotiator
 

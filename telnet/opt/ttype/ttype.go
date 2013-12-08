@@ -1,7 +1,7 @@
 package ttype
 
 import (
-	. "mud/telnet"
+	. "github.com/egonelbre/mud/telnet"
 )
 
 // Implements the TTYPE protocol as defined by RFC 1091

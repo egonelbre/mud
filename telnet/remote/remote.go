@@ -3,10 +3,11 @@ package remote
 import (
 	"io"
 	"log"
-	"mud/telnet"
-	"mud/telnet/negotiator"
-	"mud/telnet/opt"
 	"strings"
+
+	"github.com/egonelbre/mud/telnet"
+	"github.com/egonelbre/mud/telnet/negotiator"
+	"github.com/egonelbre/mud/telnet/opt"
 )
 
 const maxLine = 4096

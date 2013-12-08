@@ -1,7 +1,7 @@
 package naws
 
 import (
-	. "mud/telnet"
+	. "github.com/egonelbre/mud/telnet"
 )
 
 // Implements the NAWS protocol as defined by RFC 1073
