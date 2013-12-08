@@ -39,11 +39,11 @@ const greeting = `
 func handleConnection(c net.Conn) {
 	r := remote.New(c)
 
-	r.Send(greeting)
-	r.Send("What's your nick? ")
+	r.Print(greeting)
+	r.Print("What's your nick? ")
 	nick := <-r.Lines
 
-	r.Send(fmt.Sprintf("\033[1;30;41mWelcome %s!\033[0m\n", nick))
+	r.Printf("\033[1;30;41mWelcome %s!\033[0m\n", nick)
 
 	for line := range r.Lines {
 		fmt.Printf("...doing %s\n", line)

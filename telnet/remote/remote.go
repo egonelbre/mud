@@ -2,6 +2,7 @@ package remote
 
 import (
 	"io"
+	"fmt"
 	"log"
 	"strings"
 
@@ -12,26 +13,19 @@ import (
 
 const maxLine = 4096
 
-type Remote struct {
+type Conn struct {
 	conn       io.ReadWriter
 	Lines      chan string
 	send       chan telnet.Command
 	negotiator telnet.Negotiator
 }
 
-func New(input io.ReadWriter) *Remote {
-	r := &Remote{
-		conn:       input,
-		Lines:      make(chan string),
-		send:       make(chan telnet.Command),
-		negotiator: negotiator.NewDefault(),
-	}
-	go r.run()
-	return r
+func New(input io.ReadWriter) *Conn {
+	return NewWithNegotiator(input, negotiator.NewDefault())
 }
 
-func NewWithNegotiator(input io.ReadWriter, n telnet.Negotiator) *Remote {
-	r := &Remote{
+func NewWithNegotiator(input io.ReadWriter, n telnet.Negotiator) *Conn {
+	r := &Conn{
 		conn:       input,
 		Lines:      make(chan string),
 		send:       make(chan telnet.Command),
@@ -41,11 +35,11 @@ func NewWithNegotiator(input io.ReadWriter, n telnet.Negotiator) *Remote {
 	return r
 }
 
-func (r *Remote) formatLine(line string) string {
+func (r *Conn) formatLine(line string) string {
 	return strings.Replace(line, "\n", "\r\n", -1)
 }
 
-func (r *Remote) prepare(c telnet.Command) telnet.Command {
+func (r *Conn) prepare(c telnet.Command) telnet.Command {
 	switch cmd := c.(type) {
 	case string:
 		return r.formatLine(cmd)
@@ -59,11 +53,19 @@ func (r *Remote) prepare(c telnet.Command) telnet.Command {
 	}
 }
 
-func (r *Remote) Send(c telnet.Command) {
+func (r *Conn) Send(c telnet.Command) { 
 	r.send <- r.prepare(c)
 }
 
-func (r *Remote) run() {
+func (r *Conn) Print(s string){
+	r.send <- r.prepare(s)
+}
+
+func (r *Conn) Printf(format string, a ...interface{}){
+	r.send <- r.prepare(fmt.Sprintf(format, a...))
+}
+
+func (r *Conn) run() {
 	defer r.Terminate()
 
 	cmds := make(chan telnet.Command)
@@ -89,6 +91,6 @@ func (r *Remote) run() {
 	}
 }
 
-func (r *Remote) Terminate() {
+func (r *Conn) Terminate() {
 	close(r.Lines)
 }
